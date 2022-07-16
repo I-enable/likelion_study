@@ -56,7 +56,7 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 // 신청게시판 수정
-router.put("/:postId", async (req, res) => {
+router.put("/:postId", verifyToken, async (req, res) => {
     const { postId } = req.params;
     const content = req.body.content;
     const time = req.body.time;
@@ -71,7 +71,6 @@ router.put("/:postId", async (req, res) => {
             time: time
         }
     });
-    
     if (dbcheckTime[0] == undefined) {
         if (req.decoded.id == postId) {
             if (postId == dbcheckId[0].id) {
@@ -88,13 +87,16 @@ router.put("/:postId", async (req, res) => {
                 }); 
             };
         };
-        if (time == dbcheckTime[0].time) {
-            return res.json({
-                info : dbcheckTime[0],
-                data : "이미 존재합니다."
-            })
-        };
-    }
+    };
+
+    if (time == dbcheckTime[0].time) {
+        return res.json({
+            info : dbcheckTime[0],
+            data : "이미 존재합니다."
+        })};
+       
+    console.log(time);
+    console.log(dbcheckTime[0].time);
     
     return res.json({
         data : "로그인 후 이용가능한 서비스 입니다."
@@ -103,7 +105,7 @@ router.put("/:postId", async (req, res) => {
 });
 
 // 신청게시판 삭제
-router.delete("/:postId", async (req, res) => {
+router.delete("/:postId", verifyToken, async (req, res) => {
     const { postId } = req.params;
 
     const dbcheckId = await General.findAll({

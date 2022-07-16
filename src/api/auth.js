@@ -67,8 +67,7 @@ router.post("/login", async (req, res) => {
     
     return res.json({
         data : "아이디가 존재하지 않습니다."
-    })
-    // 암호화
+    });
 });
 
 export default router;
